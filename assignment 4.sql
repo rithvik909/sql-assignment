@@ -13,12 +13,12 @@ begin
 	calendar AS
 	(SELECT
 		Date         = CONVERT(date, d),
-		Day_Of_Year   = cast(DATEPART(DAYOFYEAR, d)as varchar)+'-'+cast(datepart(DAYOFYEAR,@CutoffDate)AS varchar),
-		Day_Of_Month  = cast(DATEPART(DAY,d)as varchar)+'-'+cast(datepart(day,eomonth(d))as varchar),
+		Day_Of_Year   = datename(DAYOFYEAR, d)+'-'+datename(DAYOFYEAR,@CutoffDate),
+		Day_Of_Month  = datename(DAY,d)+'-'+datename(day,eomonth(d)),
 		Day_Name      = DATENAME(WEEKDAY,   d),
-		Week_of_year  = cast(DATEPART(WEEK,d)as varchar)+'-'+cast(DATEPART(WEEK,@CutoffDate) as varchar),
-		Day_Of_Week    = cast(DATEPART(WEEKDAY,   d)as varchar)+' - 7',
-		Month        = cast(DATEPART(MONTH,d)as varchar)+'- 12',
+		Week_of_year  = datename(WEEK,d)+'-'+datename(WEEK,@CutoffDate) ,
+		Day_Of_Week    = datename(WEEKDAY,   d)+' - 7',
+		Month        = datename(MONTH,d)+'- 12',
 		Month_Name    = DATENAME(MONTH,d)
   FROM date_add)
 SELECT * FROM calendar
@@ -27,4 +27,4 @@ SELECT * FROM calendar
 end;
 go
 
-exec calender @StartDate='2023-01-01';
+exec calender @StartDate='2024-01-01';
