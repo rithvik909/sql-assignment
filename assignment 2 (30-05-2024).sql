@@ -1,3 +1,6 @@
+
+--- please use EMPID268 to all this querys -------
+
 ----- 1st question assignment -------
 select service_type,location_1 from company_bonus group by service_type,location_1 having (sum(salary)>2*(avg(salary)) and max(salary)>3*(min(salary)));
 
@@ -49,7 +52,16 @@ select * from company_bonus where (service_type=1 and
 									or(service_type in (2,3,4) and datediff(year,date_of_join,GETDATE())>=15 and datediff(year,getdate(),dateadd(year,55,DOB))>=20);
 
 ------ 4th question assignment2---------
-
+WITH cte AS (
+    SELECT id,service_type, age, concat(datediff(year,date_of_join,getdate()),' years') as 'service_status',
+        row_number() OVER (partition by service_type ORDER BY age) rnk_min,
+        row_number() OVER (partition by service_type ORDER BY age DESC) rnk_max
+    FROM company_bonus
+)
+SELECT id,service_type, age,service_status
+FROM cte
+WHERE rnk_min = 1 OR rnk_max = 1
+ORDER BY service_type,age;
 
 
 
