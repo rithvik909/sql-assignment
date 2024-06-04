@@ -54,10 +54,12 @@ select * from company_bonus where (service_type=1 and
 ------ 4th question assignment2---------
 WITH cte AS (
     SELECT id,name,service_type, age, dbo.age(date_of_join,GETDATE()) as 'service_status',
+		sum(age) over(order by service_type),
         row_number() OVER (partition by service_type ORDER BY age) rnk_min,
         row_number() OVER (partition by service_type ORDER BY age DESC) rnk_max
     FROM company_bonus
 )
+select * from cte
 SELECT id,name,service_type, age,service_status
 FROM cte
 WHERE rnk_min = 1 OR rnk_max = 1
